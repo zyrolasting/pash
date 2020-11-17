@@ -195,16 +195,18 @@ def split_command_input(curr, previous_node, graph, fileIdGen, fan_out, batch_si
     # curr.category in ["stateless", "pure"] and
 
     new_cat = None
+    print("Previous:", previous_node)
+    print("Current:", curr)
     if (not isinstance(curr, Cat)
         and number_of_previous_nodes == 1
         and fan_out > 1):
         ## If the previous command is either a cat with one input, or
         ## if it something else
-        if(not isinstance(previous_node, Cat) or
+        if(True or not isinstance(previous_node, Cat) or
            (isinstance(previous_node, Cat) and
             len(previous_node.get_input_file_ids()) == 1)):
 
-            if(not isinstance(previous_node, Cat)):
+            if(True or not isinstance(previous_node, Cat)):
                 input_file_ids = curr.get_input_file_ids()
                 assert(len(input_file_ids) == 1)
                 input_file_id = input_file_ids[0]
@@ -231,7 +233,7 @@ def split_command_input(curr, previous_node, graph, fileIdGen, fan_out, batch_si
             new_cat = make_cat_node(output_fids, new_input_file_id)
             graph.add_node(new_cat)
 
-            if(not isinstance(previous_node, Cat)):
+            if(True or not isinstance(previous_node, Cat)):
                 ## Change the current node's input with the new_input
                 index = curr.find_file_id_in_in_stream(input_file_id)
                 chunk = curr.in_stream[index]
@@ -266,13 +268,13 @@ def parallelize_cat(curr, graph, fileIdGen, fan_out, batch_size):
 
             ## If the current node is not a cat, it means that we need
             ## to generate a cat using a split
-            if(not isinstance(curr, Cat)):
-                graph, new_cat = split_command_input(next_node, curr, graph, fileIdGen, fan_out, batch_size)
-                if(not new_cat is None):
-                    curr = new_cat
-                    next_nodes_and_edges = graph.get_next_nodes_and_edges(curr)
-                    assert(len(next_nodes_and_edges) == 1)
-                    next_node = next_nodes_and_edges[0][0]
+            graph, new_cat = split_command_input(next_node, curr, graph, fileIdGen, fan_out, batch_size)
+            print("New cat:", new_cat)
+            if(not new_cat is None):
+                curr = new_cat
+                next_nodes_and_edges = graph.get_next_nodes_and_edges(curr)
+                assert(len(next_nodes_and_edges) == 1)
+                next_node = next_nodes_and_edges[0][0]
 
             ## If curr is cat, it means that split suceeded, or it was
             ## already a cat. In any case, we can proceed with the
