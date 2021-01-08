@@ -201,6 +201,21 @@ def naive_parallelize_stateless_nodes_bfs(graph, fan_out, batch_size):
     ## current graph fileIds.
     fileIdGen = graph.get_file_id_gen()
 
+    ## TODO: We have to iterate on edges instead of nodes:
+    ##       1. If an edge is followed by a parallelizable node, then:
+    ##          + If it is not preceded by a cat with len(inputs) = width
+    ##            then we add that cat with a split.
+    ##       2. Now we should have a cat with width inputs before the edge,
+    ##          and now we can parallelize
+
+    ## TODO: Make workset work on edges and not on nodes
+    ##
+    ## TODO: Make sure that all commands return new edges and not new nodes anymore.
+
+
+    ## TODO: Also add an auxiliary function that ensures that a list is singleton (with assert)
+    ##       and then takes the single item.
+
     ## Starting from the sources of the graph traverse the whole graph using a
     ## node_id workset. Every iteration we add the next nodes to the workset as
     ## well as any newly added nodes due to optimizations. 
