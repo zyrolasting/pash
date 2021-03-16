@@ -6,7 +6,7 @@ from time import time as timestamp
 from functools import wraps
 import pandas as pd
 
-PASH_TOP = "/home/tamlu/pash"
+PASH_TOP = "/home/ubuntu/pash"
 TESTFILES = ["../scripts/input/1M.txt", "../scripts/input/10M.txt", "../scripts/input/100M.txt", "../scripts/input/1G.txt"]
 BATCHSZ = [10000, 100000, 1000000, 10000000]
 
