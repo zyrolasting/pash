@@ -64,19 +64,24 @@ void SplitByLines(FILE *inputFile, int batchSize, FILE *outputFiles[], unsigned 
     if (headSize == 0)
     {
       headSize = len;
-      if ((len = getline(&newLineBuffer, &bufLen, inputFile)) < 0)
+      ssize_t blen;
+      if ((blen = getline(&newLineBuffer, &bufLen, inputFile)) < 0)
       {
-        //edge case to fix: can't be called if file ended
-        err(2, "r_split: getline failed");
+        // Check if error is caused by eof
+        if (feof(inputFile)) {
+          blen = 0;
+        } else {
+          err(2, "getline failed");
+        }
       }
-      blockSize = prevRestSize + headSize + len;
+      blockSize = prevRestSize + headSize + blen;
       if (add_header)
         writeHeader(outputFile, id, blockSize);
       //write blocks
       if (prevRestSize)
         safeWrite(incompleteLine, 1, prevRestSize, outputFile);
       safeWrite(buffer, 1, headSize, outputFile);
-      safeWriteWithFlush(newLineBuffer, 1, len, outputFile);
+      safeWriteWithFlush(newLineBuffer, 1, blen, outputFile);
     }
     else
     {
@@ -121,7 +126,8 @@ void SplitByLines(FILE *inputFile, int batchSize, FILE *outputFiles[], unsigned 
 
 void SplitByLinesRaw(FILE *inputFile, int batchSize, FILE *outputFiles[], unsigned int numOutputFiles)
 {
-  int current = 0, len = 0;
+  int current = 0;
+  ssize_t len = 0;
   size_t bufLen = 0;
   FILE* outputFile = outputFiles[current];
 

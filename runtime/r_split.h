@@ -31,7 +31,7 @@ typedef int8_t bool;
 #define  MAX(a,b) a < b ? b : a
 
 void readHeader(FILE* inputFile, int64_t *id, size_t *blockSize) {
-    int ret;
+    size_t ret;
     if ((ret = fread(id, sizeof(int64_t), 1, inputFile)) < 0)
         err(2, "Id read failed");
 
@@ -42,14 +42,14 @@ void readHeader(FILE* inputFile, int64_t *id, size_t *blockSize) {
 void safeWriteWithFlush(char* buffer, size_t bytes, size_t count, FILE* outputFile) {
     size_t len;
     if((len = fwrite(buffer, bytes, count, outputFile)) != count) {
-      err(2, "write failed count %ld, wrote %ld", count, len);
+      err(2, "write failed count %lu, wrote %lu", count, len);
     }
-    fflush(outputFile);
+  fflush(outputFile);
 }
 void safeWrite(char* buffer, size_t bytes, size_t count, FILE* outputFile) {
     size_t len;
     if((len = fwrite(buffer, bytes, count, outputFile)) != count) {
-      err(2, "write failed count %ld, wrote %ld", count, len);
+      err(2, "write failed count %lu, wrote %lu", count, len);
     }
 }
 

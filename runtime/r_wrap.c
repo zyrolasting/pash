@@ -84,7 +84,7 @@ void processCmd(char *args[])
                 // fprintf(stderr, "reading stdin\n");
                 if (readSize && fread(buffer, 1, readSize, stdin) != readSize)
                 {
-                    err(2, "r_wrap: There is a problem with reading the block");
+                    err(2, "There is a problem with reading the block");
                 }
                 if ((currWriteLen + readSize) > writeBufLen) {
                     writeBufLen = 2*(currWriteLen + readSize);
@@ -126,7 +126,7 @@ void processCmd(char *args[])
 					        case EAGAIN:
                                 break;
                             default:
-                                err(2, "r_wrap: failed reading from fork, error %ld", len);
+                                err(2, "failed reading from fork, error %ld", len);
                             }
                         }
                     }
@@ -141,7 +141,7 @@ void processCmd(char *args[])
 						len = 0;
 						break;
 					default:
-						err(2, "r_wrap: error writing to fork, error %ld", len);
+						err(2, "error writing to fork, error %ld", len);
 					}            
                 } else {
                     currWriteLen -= len; 
