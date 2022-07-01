@@ -47,7 +47,7 @@ jobs:
           run: |
             cat >ci-build.sh <<'EOF'
             #! /usr/bin/env bash
-            bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"'
+            bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"
             EOF
             chmod +x ci-build.sh
         - name: Make .deb
