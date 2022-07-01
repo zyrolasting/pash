@@ -49,6 +49,7 @@ jobs:
             #! /usr/bin/env bash
             bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"'
             EOF
+            chmod +x ci-build.sh
         - name: Make .deb
           run: ./ci-build.sh ubuntu '${{ inputs.deb_version }}' deb
         - name: Make .rpm
