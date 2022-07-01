@@ -1,0 +1,13 @@
+on:
+  pull_request:
+    branches:
+        - main
+        - future
+jobs:
+  build-packages:
+    if: ${{ github.event.pull_request.draft == false }}
+    uses: zyrolasting/pash/.github/workflows/packaging.yml@main
+    with:
+      default_package_version: '0.0.0'
+      git_ref: ${{ github.event.pull_request.head.sha }}
+    secrets: inherit

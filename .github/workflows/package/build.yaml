@@ -1,0 +1,47 @@
+# This is a reusable workflow, as defined by
+# https://docs.github.com/en/actions/using-workflows/reusing-workflows
+#
+# Maintain this separately as the "meat" of the packaging work.  Other
+# files of form packaging-*.yaml call this one from a different
+# perspective.
+#
+# To handle the documented limitations of reusable workflows, make
+# sure the near the /!\ comments match your intended repository and
+# user.
+
+name: Package for publication
+on:
+  workflow_call:
+    inputs:
+      default_package_version:
+        required: true
+      git_ref:
+        required: true
+      deb_version:
+        default: ${{ inputs.default_package_version }}
+        required: false
+      rpm_version:
+        default: ${{ inputs.default_package_version }}
+        required: false
+      pacman_version:
+        default: ${{ inputs.default_package_version }}
+        required: false
+jobs:
+  package-pash:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Clone
+          uses: actions/checkout@v2 
+          with:
+            ref: ${{ inputs.git_ref }}
+        - name: Make .deb
+          run: bash scripts/package/deploy.sh ubuntu '${{ inputs.deb_version }}' deb
+        - name: Make .rpm
+          run: bash scripts/package/deploy.sh fedora '${{ inputs.rpm_version }}' rpm
+        - name: Make .tar.gz (Pacman)
+          run: bash scripts/package/deploy.sh archlinux '${{ inputs.rpm_version }}' pacman
+        - name: Upload Packages as Artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: Packages
+            path: scripts/package/output
