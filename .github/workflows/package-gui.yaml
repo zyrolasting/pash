@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       fallback_version:
-        # TODO: see comment in ./package-pull-requests.yaml
-        # It impacts whether this is a good string to show the user.
+        # TODO: The comment in ./package-pull-requests.yaml
+        # impacts whether this is good for the user to read.
         description: 'Fallback version string to use in any package format. Use 0.0.0 for throwaway prototypes. Compatibility not guarenteed for future formats.'
         default: '0.0.0'
         required: true
