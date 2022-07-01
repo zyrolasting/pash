@@ -43,7 +43,7 @@ jobs:
         - name: Configure runner shell
           run: >
             build() {
-              ./deploy.sh "$1" "${2:-"${{ inputs.fallback_version }}"}" "$3"
+              bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"
             }
         - name: Make .deb
           run: build ubuntu '${{ inputs.deb_version }}' deb
