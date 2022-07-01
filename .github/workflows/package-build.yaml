@@ -31,7 +31,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: scipts/package
+    working-directory: scripts/package
 jobs:
   package-pash:
       runs-on: ubuntu-latest
