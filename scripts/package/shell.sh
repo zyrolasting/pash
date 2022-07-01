@@ -17,20 +17,27 @@ fi
 mkdir -p "$here/output"
 
 main() {
-    local interactive_flags=''
+    local docker_interactive_flags=''
+    local entrypoint_interactive_flags=''
+
     if [[ $- == *i* ]]; then
-        interactive_flags='--interactive --tty'
+        set -x
+        docker_interactive_flags='--interactive --tty'
+        entrypoint_interactive_flags='--rcfile'
+        set +x
     fi
 
     docker run \
 	   --entrypoint /bin/bash \
 	   --rm \
-           $interactive_flags \
 	   --user "$(id -u):$(id -g)" \
 	   --volume "$here/output:/out" \
 	   --volume "$here/tools:/tools" \
 	   --volume "$PASH_TOP:/src" \
-	   fpm /tools/start "$@"
+           $docker_interactive_flags \
+           fpm \
+           $entrypoint_interactive_flags \
+           /tools/start "$@"
 }
 
 # Only enter if script was not sourced
