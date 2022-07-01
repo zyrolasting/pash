@@ -40,7 +40,8 @@ jobs:
           uses: actions/checkout@v2 
           with:
             ref: ${{ inputs.git_ref }}
-          run: |
+        - name: Configure runner shell
+          run: >
             build() {
               ./shell.sh -ic "build '$1' '${2:-"${{ inputs.fallback_version }}"}' '$3'"
             }
