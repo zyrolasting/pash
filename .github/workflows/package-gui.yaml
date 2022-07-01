@@ -4,10 +4,10 @@ name: On-demand Packaging
 on:
   workflow_dispatch:
     inputs:
-      default_package_version:
+      fallback_version:
         # TODO: see comment in ./package-pull-requests.yaml
         # It impacts whether this is a good string to show the user.
-        description: 'Version string to use in any package format, if no more specific one is defined. Defaults to 0.0.0 to prototype.'
+        description: 'Fallback version string to use in any package format. Use 0.0.0 for throwaway prototypes. Compatibility not guarenteed for future formats.'
         default: '0.0.0'
         required: true
       git_ref:
@@ -15,24 +15,21 @@ on:
         default: 'main'
         required: true
       deb_version:
-        description: 'Version string to use for .deb packages. Defaults to default_package_version.'
-        default: ${{ inputs.default_package_version }}
+        description: "Version string to use for pacman's .tar.gz format, if not the fallback."
         required: false
       rpm_version:
-        description: 'Version string to use for .rpm packages. Defaults to default_package_version.'
-        default: ${{ inputs.default_package_version }}
+        description: 'Version string to use for .rpm packages, if not the fallback'
         required: false
-      pacman_version:
-        description: "Version string to use for pacman's .tar.gz format. Defaults to default_package_version."
-        default: ${{ inputs.default_package_version }}
+      pacman_tgz_version:
+        description: "Version string to use for pacman's .tar.gz format, if not the fallback."
         required: false
 jobs:
   build-packages:
     uses: zyrolasting/pash/.github/workflows/packaging.yml@main
     with:
-      default_package_version: ${{ inputs.default_package_version }}
+      fallback_version: ${{ inputs.fallback_version }}
       deb_version: ${{ inputs.deb_version }}
       rpm_version: ${{ inputs.rpm_version }}
-      pacman_version: ${{ inputs.pacman_version }}
+      pacman_tgz_version: ${{ inputs.pacman_tgz_version }}
       git_ref: ${{ inputs.git_ref }}
     secrets: inherit

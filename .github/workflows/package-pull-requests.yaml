@@ -12,6 +12,6 @@ jobs:
       # TODO: consider using version files in the repository
       # 0.0.0 has been tested to work in Fedora, Ubuntu, Debian, and Arch,
       # which does not imply compatibility with all package formats.
-      default_package_version: '0.0.0'
+      fallback_version: '0.0.0'
       git_ref: ${{ github.event.pull_request.head.sha }}
     secrets: inherit
