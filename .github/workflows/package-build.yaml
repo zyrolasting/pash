@@ -40,17 +40,21 @@ jobs:
           uses: actions/checkout@v2 
           with:
             ref: ${{ inputs.git_ref }}
-        - name: Configure runner shell
-          run: >
-            build() {
-              bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"
-            }
+        # I generate a script because:
+        #   1. We need a way to hold CI-specific info constant in multiple commands
+        #   2. Job steps do not seem to preserve Bash functions by default.
+        - name: Generate build script
+          run: |
+>./ci-build.sh cat <<'EOF'
+#! /usr/bin/env bash
+bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }'}" "$3"
+EOF
         - name: Make .deb
-          run: build ubuntu '${{ inputs.deb_version }}' deb
+          run: ./ci-build.sh ubuntu '${{ inputs.deb_version }}' deb
         - name: Make .rpm
-          run: build fedora '${{ inputs.rpm_version }}' rpm
+          run: ./ci-build.sh fedora '${{ inputs.rpm_version }}' rpm
         - name: Make .tar.gz (Pacman)
-          run: build archlinux '${{ inputs.pacman_tgz_version }}' pacman
+          run: ./ci-build.sh archlinux '${{ inputs.pacman_tgz_version }}' pacman
         - name: Upload Packages as Artifacts
           uses: actions/upload-artifact@v3
           with:
