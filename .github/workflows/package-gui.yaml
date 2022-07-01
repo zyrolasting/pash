@@ -5,7 +5,9 @@ on:
   workflow_dispatch:
     inputs:
       default_package_version:
-        description: 'Version string to use in any package format, if no more specific one is defined. Defaults to 0.0.0 if you just want to prototype.'
+        # TODO: see comment in ./package-pull-requests.yaml
+        # It impacts whether this is a good string to show the user.
+        description: 'Version string to use in any package format, if no more specific one is defined. Defaults to 0.0.0 to prototype.'
         default: '0.0.0'
         required: true
       git_ref:
@@ -28,7 +30,7 @@ jobs:
   build-packages:
     uses: zyrolasting/pash/.github/workflows/packaging.yml@main
     with:
-      default_package_version: ${{ inputs.package_version }}
+      default_package_version: ${{ inputs.default_package_version }}
       deb_version: ${{ inputs.deb_version }}
       rpm_version: ${{ inputs.rpm_version }}
       pacman_version: ${{ inputs.pacman_version }}
