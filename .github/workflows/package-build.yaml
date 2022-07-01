@@ -41,14 +41,17 @@ jobs:
           with:
             ref: ${{ inputs.git_ref }}
         # I generate a script because:
-        #   1. We need a way to hold CI-specific info constant in multiple commands
-        #   2. Job steps do not seem to preserve Bash functions by default.
+        #   1. It holds job-specific information constant across package builds.
+        #   2. Job steps do not preserve Bash functions because they each get their own shell.
         - name: Generate build script
-          run: |
->./ci-build.sh cat <<'EOF'
-#! /usr/bin/env bash
-bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }'}" "$3"
-EOF
+          run:
+            - >ci-build.sh
+            - cat
+            - |
+              <<'EOF'
+              #! /usr/bin/env bash
+              bash -i ./deploy.sh "$1" "${2:-'${{ inputs.fallback_version }'}" "$3"'
+              EOF
         - name: Make .deb
           run: ./ci-build.sh ubuntu '${{ inputs.deb_version }}' deb
         - name: Make .rpm
