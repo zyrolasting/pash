@@ -23,7 +23,7 @@ on:
         default: ${{ inputs.default_package_version }}
         required: false
       pacman_version:
-        description: 'Version string to use for pacman\'s .tar.gz format. Defaults to default_package_version.'
+        description: "Version string to use for pacman's .tar.gz format. Defaults to default_package_version."
         default: ${{ inputs.default_package_version }}
         required: false
 jobs:
