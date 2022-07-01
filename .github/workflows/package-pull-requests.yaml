@@ -7,7 +7,7 @@ on:
 jobs:
   build-packages:
     if: ${{ github.event.pull_request.draft == false }}
-    uses: zyrolasting/pash/.github/workflows/packaging.yml@main
+    uses: zyrolasting/pash/.github/workflows/package-build.yml@main
     with:
       # TODO: consider using version files in the repository
       # 0.0.0 has been tested to work in Fedora, Ubuntu, Debian, and Arch,
