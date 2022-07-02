@@ -40,15 +40,16 @@ jobs:
           with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
-        - name: Clone FPM
-          uses: actions/checkout@v2
-          with:
-            repository: jordansissel/fpm
-            path: scripts/package/fpm
         - name: Clone PaSh
           uses: actions/checkout@v2
           with:
             ref: ${{ inputs.git_ref }}
+        - name: Clone FPM
+          uses: actions/checkout@v2
+          with:
+            repository: jordansissel/fpm
+            token: ${{ secrets.GH_PAT }}
+            path: scripts/package/fpm
         # I generate a script because:
         #   1. It holds job-specific information constant across package builds.
         #   2. Job steps do not preserve Bash functions because they each get their own shell.
