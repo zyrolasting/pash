@@ -35,6 +35,11 @@ jobs:
   package-pash:
       runs-on: ubuntu-latest
       steps:
+        - name: Login to Docker Hub
+          uses: docker/login-action@v1
+          with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
         - name: Clone FPM
           uses: actions/checkout@v2
           with:
