@@ -31,20 +31,19 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: scripts/package
 jobs:
   package-pash:
       runs-on: ubuntu-latest
       steps:
-        - name: Clone PaSh
-          uses: actions/checkout@v2
-          with:
-            ref: ${{ inputs.git_ref }}
         - name: Clone FPM
           uses: actions/checkout@v2
           with:
             repository: jordansissel/fpm
-            path: scripts/package
+            path: scripts/package/fpm
+        - name: Clone PaSh
+          uses: actions/checkout@v2
+          with:
+            ref: ${{ inputs.git_ref }}
         # I generate a script because:
         #   1. It holds job-specific information constant across package builds.
         #   2. Job steps do not preserve Bash functions because they each get their own shell.
@@ -52,9 +51,7 @@ jobs:
           run: |
             cat >ci-build.sh <<'EOF'
             ls
-            ls scripts
-            ls scripts/package
-            bash ./scripts/package/deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"
+            ./scripts/package/deploy.sh "$1" "${2:-'${{ inputs.fallback_version }}'}" "$3"
             EOF
             chmod +x ci-build.sh
         - name: Make .deb
